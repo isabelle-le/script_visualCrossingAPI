@@ -33,6 +33,26 @@ def get_single_weather( station="paris", key="QRLSXGZEPLWWUC7JLBEQAVQSE", unit_g
 
 
 def main():
+    key ="RLNCXT8KTDLMAMYL3P967EEMG" #"QRLSXGZEPLWWUC7JLBEQAVQSE"
+    cities = ["PARIS MONTSOURIS","Vélizy"]
+    dict_filter = lambda x, y: dict([(i, x[i]) for i in x if i in set(y)])
+    for c in cities:
+        get_single_weather_list = get_single_weather( c,key, "metric",
+                                                     "datetime,datetimeEpoch,name,address,resolvedAddress,latitude,longitude,temp,humidity,precip,solarradiation,solarenergy,conditions,stations,icon,source",
+                                                     "Cobs", "json")
+        city_data = json.loads(get_single_weather_list)
+        # python object to be appended
+        json_day = city_data["days"][0]
+        # appending the data
+        city_data.update(json_day)
+        new_dict_keys = ("latitude", "longitude", "resolvedAddress", "address", "timezone", "tzoffset", "datetime", "datetimeEpoch","temp", "humidity", "precip", "solarradiation", "solarenergy", "conditions", "icon", "source", "stations")
+        small_json = dict_filter(city_data, new_dict_keys)
+        # JSON formatted str
+        json_formatted_str = json.dumps(small_json, indent=2)
+        print(json_formatted_str)
+
+'''
+def main():
     key = "QRLSXGZEPLWWUC7JLBEQAVQSE"
     get_single_weather_list = get_single_weather( "paris",key, "metric",
                                                  "datetime,datetimeEpoch,name,address,resolvedAddress,latitude,longitude,temp,humidity,precip,solarradiation,solarenergy,conditions,stations,icon,source",
@@ -57,6 +77,7 @@ def main():
             station_data['solarenergy'] = paris_data['days'][0]['solarenergy']
         json_formatted_str = json.dumps(station_data, indent=10)
         print(json_formatted_str)
+'''
 
 if __name__ == "__main__":
     main()
