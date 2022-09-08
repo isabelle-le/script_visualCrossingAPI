@@ -45,20 +45,25 @@ def get_single_weather(city="Paris",dateBegin="2022-08-28", dateEnd="2022-08-30"
 
 
 def main():
+    '''
+    Test in index : PASS
+    _time : datetimeEpoch
+     utf-8: OK
+    '''
     key = "RLNCXT8KTDLMAMYL3P967EEMG" #"QRLSXGZEPLWWUC7JLBEQAVQSE"
-    cities = ["PARIS MONTSOURIS","Vélizy"]
+    cities = ["Paris Montsouris","Vélizy"]
     dict_filter = lambda x, y: dict([(i, x[i]) for i in x if i in set(y)])
     for c in cities:
-        get_single_weather_list = get_single_weather(c,"2022-09-03","2022-09-04",key, "metric",
+        get_single_weather_list = get_single_weather(c,"2022-09-01","2022-09-07",key, "metric",
                                                  "datetime,datetimeEpoch,name,address,resolvedAddress,latitude,longitude,temp,humidity,precip,solarradiation,solarenergy,conditions,stations,icon,source",
                                                  "days%2Cobs", "json")
         city_data = json.loads(get_single_weather_list)
+        new_dict_keys = ("latitude", "longitude", "resolvedAddress", "address")
+        small_json = dict_filter(city_data, new_dict_keys)
         for days in city_data["days"]:
-            json_day = days
-            city_data.update(json_day)
-            new_dict_keys = ("latitude", "longitude", "resolvedAddress", "address", "timezone", "tzoffset", "datetime", "datetimeEpoch","temp", "humidity", "precip", "solarradiation", "solarenergy", "conditions", "icon", "source", "stations")
-            small_json = dict_filter(city_data, new_dict_keys)
-            json_formatted_str = json.dumps(small_json, indent=2)
+            json_obj = days
+            json_obj.update(small_json)
+            json_formatted_str = json.dumps(json_obj, indent=2)
             print(json_formatted_str)
 '''
 def main():
