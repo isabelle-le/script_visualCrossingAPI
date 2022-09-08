@@ -34,7 +34,8 @@ def get_single_weather( station="paris", key="QRLSXGZEPLWWUC7JLBEQAVQSE", unit_g
 
 def main():
     key ="RLNCXT8KTDLMAMYL3P967EEMG" #"QRLSXGZEPLWWUC7JLBEQAVQSE"
-    cities = ["PARIS MONTSOURIS","Vélizy"]
+    # cities = ["PARIS MONTSOURIS","Vélizy"]
+    cities = ["07156099999","07147099999","C1292","LFPV","07150099999","07149099999","LFPO","LFPB","D3623","07146099999","07157099999","07145099999","D3543"]
     dict_filter = lambda x, y: dict([(i, x[i]) for i in x if i in set(y)])
     for c in cities:
         get_single_weather_list = get_single_weather( c,key, "metric",
