@@ -79,7 +79,7 @@ def main():
             small_json['solarradiation'] = city_data['days'][0]['solarradiation']
         if small_json["solarenergy"] is None:
             small_json['solarenergy'] = city_data['days'][0]['solarenergy']
-        json_formatted_str = json.dumps(data, indent = 2)
+        json_formatted_str = json.dumps(small_data, indent = 2)
         print(json_formatted_str)
 '''
 
