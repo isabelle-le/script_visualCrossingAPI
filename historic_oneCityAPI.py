@@ -67,27 +67,36 @@ def main():
             print(json_formatted_str)
 '''
 def main():
-    key = "QRLSXGZEPLWWUC7JLBEQAVQSE"
-    cities = ["paris"]
+    key = "RLNCXT8KTDLMAMYL3P967EEMG" #"QRLSXGZEPLWWUC7JLBEQAVQSE"
+    cities = ["Paris"]
+    dict_filter = lambda x, y: dict([(i, x[i]) for i in x if i in set(y)])
     for c in cities:
-        get_single_weather_list = get_single_weather(c,"2022-08-28","2022-08-30",key, "metric",
+        get_single_weather_list = get_single_weather(c,"2022-09-01","2022-09-02",key, "metric",
                                                  "datetime,datetimeEpoch,name,address,resolvedAddress,latitude,longitude,temp,humidity,precip,solarradiation,solarenergy,conditions,stations,icon,source",
-                                                 "days%2Cobs", "json")
+                                                 "Cobs%2Cdays", "json")
         city_data = json.loads(get_single_weather_list)
         for station in city_data['days'][0]['stations']:
             data = json.loads(get_single_weather(station))
-            json_station = data["stations"][station]
             for days in data["days"]:
-                json_obj = days
-                json_obj.update(json_station)
-                json_formatted_str = json.dumps(json_obj, indent=10)
-                station_data = json.loads(json_formatted_str)
-                if station_data["solarradiation"] is None:
-                    station_data['solarradiation'] = city_data['days'][0]['solarradiation']
-                if station_data["solarenergy"] is None:
-                    station_data['solarenergy'] = city_data['days'][0]['solarenergy']
-                json_formatted_str = json.dumps(station_data, indent=10)
+                json_day = days
+                # appending the data
+                data.update(json_day)
+                new_dict_keys = (
+                "latitude", "longitude", "resolvedAddress", "address", "timezone", "tzoffset", "datetime", "datetimeEpoch",
+                "temp", "humidity", "precip", "solarradiation", "solarenergy", "conditions", "icon", "source", "stations")
+                small_json = dict_filter(data, new_dict_keys)
+                # JSON formatted str
+                json_formatted_str = json.dumps(small_json, indent=2)
+                data = json.loads(json_formatted_str)
+                if small_json["solarradiation"] is None:
+                    small_json['solarradiation'] = city_data['days'][i]['solarradiation'] #always solar of first day
+                if small_json["solarenergy"] is None:
+                    small_json['solarenergy'] = city_data['days'][i]['solarenergy']
+                i = i + 1
+                print(i)
+                json_formatted_str = json.dumps(small_json, indent=2)
                 print(json_formatted_str)
+
 '''         
 
 if __name__ == "__main__":
